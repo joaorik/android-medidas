@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Medidas</string>
+    <string name="cm">centímetros</string>
+    <string name="pol">polegadas</string>
+</resources>
