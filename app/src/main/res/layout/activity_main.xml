@@ -8,20 +8,20 @@
 
     <EditText
         android:id="@+id/cmText"
-        android:layout_width="160dp"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/polText"
         android:layout_marginStart="26dp"
         android:ems="10"
-        android:labelFor="@id/cmText"
         android:inputType="number|numberSigned|numberDecimal"
+        android:labelFor="@id/cmText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
 
     <EditText
         android:id="@+id/polText"
-        android:layout_width="160sp"
+        android:layout_width="150sp"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"

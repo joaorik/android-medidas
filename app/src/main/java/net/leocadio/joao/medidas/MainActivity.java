@@ -1,6 +1,7 @@
 package net.leocadio.joao.medidas;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,24 @@ import java.util.ArrayList;
 public class MainActivity extends Activity {
 
     private Medidas selectedEditTxt;
+    BarChart barChart;
+    private float cent, pol;
+
+    public float getCent() {
+        return cent;
+    }
+
+    public void setCent(float cent) {
+        this.cent = cent;
+    }
+
+    public float getPol() {
+        return pol;
+    }
+
+    public void setPol(float pol) {
+        this.pol = pol;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,28 +45,6 @@ public class MainActivity extends Activity {
 
         final EditText centimetro = (EditText) findViewById(R.id.cmText);
         final EditText polegada = (EditText) findViewById(R.id.polText);
-        final BarChart barChart = (BarChart) findViewById(R.id.barChart);
-
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setMaxVisibleValueCount(50);
-        barChart.setPinchZoom(false);
-        barChart.setDrawGridBackground(true);
-
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
-
-        barEntries.add(new BarEntry(1, 40f));
-        barEntries.add(new BarEntry(2, 44f));
-        barEntries.add(new BarEntry(3, 30f));
-        barEntries.add(new BarEntry(4, 36f));
-
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Medidas");
-        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-
-        BarData data = new BarData(barDataSet);
-        data.setBarWidth(0.9f);
-
-        barChart.setData(data);
 
         // Centimentro
         centimetro.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -64,13 +61,18 @@ public class MainActivity extends Activity {
                 String tmpValue = centimetro.getText().toString();
 
                 if (!tmpValue.equals("") && !tmpValue.equals(".") && selectedEditTxt == Medidas.CENTIMENTROS) {
-                    double temp = Double.parseDouble(tmpValue);
+                    float temp = Float.parseFloat(tmpValue);
                     // polegadas
-                    double outputPol = (temp * 0.39370);
+                    float outputPol = (float) (temp * 0.39370);
+
                     polegada.setText(String.valueOf(stripDecimal(outputPol)));
+
+                    setPol(outputPol);
+
                 } else if (selectedEditTxt == Medidas.CENTIMENTROS){
                     polegada.setText("");
                 }
+
             }
 
             @Override
@@ -93,24 +95,63 @@ public class MainActivity extends Activity {
                 String tmpValue = polegada.getText().toString();
 
                 if (!tmpValue.equals("") && !tmpValue.equals(".") && selectedEditTxt == Medidas.POLEGADAS) {
-                    double temp = Double.parseDouble(tmpValue);
+                    float temp = Float.parseFloat(tmpValue);
                     //centimetros
-                    double outputCent = (temp / 0.39370);
+                    float outputCent = (float) (temp / 0.39370);
+
                     centimetro.setText(String.valueOf(stripDecimal(outputCent)));
+
+                    setCent(outputCent);
+
                 } else if (selectedEditTxt == Medidas.POLEGADAS) {
                     centimetro.setText("");
                 }
+
             }
 
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
+
+        charts();
+
     }
 
-    public Double stripDecimal(Double temp) {
+    public float stripDecimal(float temp) {
 
         String valor = String.format("%.2f", temp);
-        return Double.parseDouble(valor);
+        return Float.parseFloat(valor);
     }
+
+    public void charts() {
+
+        BarChart barChart = (BarChart) findViewById(R.id.barChart);
+
+        barChart.setDrawBarShadow(false);
+        barChart.setDrawValueAboveBar(true);
+        barChart.setMaxVisibleValueCount(50);
+        barChart.setPinchZoom(true);
+        barChart.setDrawGridBackground(false);
+
+        ArrayList<BarEntry> barEntries = new ArrayList<>();
+
+        barEntries.add(new BarEntry(0f, 70, "Centimetros"));
+        barEntries.add(new BarEntry(1f, 50, "Polegadas"));
+
+        BarDataSet barDataSet = new BarDataSet(barEntries, "Medidas:");
+        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
+        barDataSet.setValueTextColor(Color.BLUE);
+        barDataSet.notifyDataSetChanged();
+        barDataSet.setValueTextSize(15);
+
+
+        BarData data = new BarData(barDataSet);
+        data.setBarWidth(0.5f);
+        data.notifyDataChanged();
+
+        barChart.setData(data);
+        barChart.invalidate();
+    }
+
 }
