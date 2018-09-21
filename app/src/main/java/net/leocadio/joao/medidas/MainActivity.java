@@ -8,34 +8,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import me.ithebk.barchart.BarChart;
 import me.ithebk.barchart.BarChartModel;
-
 
 public class MainActivity extends Activity {
 
     private Medidas selectedEditTxt;
-    BarChart barChart;
-    private float cent, pol;
-
-    public float getCent() {
-        return cent;
-    }
-
-    public void setCent(float cent) {
-        this.cent = cent;
-    }
-
-    public float getPol() {
-        return pol;
-    }
-
-    public void setPol(float pol) {
-        this.pol = pol;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +22,24 @@ public class MainActivity extends Activity {
 
         final EditText centimetro = (EditText) findViewById(R.id.cmText);
         final EditText polegada = (EditText) findViewById(R.id.polText);
+        final BarChart barChart = (BarChart) findViewById(R.id.barChart);
+
+        //Add single bar
+        barChart.setBarMaxValue(999);
+
+        BarChartModel barCentimetro = new BarChartModel();
+        barCentimetro.setBarValue(0);
+        barCentimetro.setBarColor(Color.parseColor("#FFC107"));
+        barCentimetro.setBarTag("Centimetros"); //You can set your own tag to bar model
+        barCentimetro.setBarText("Centimetros");
+        barChart.addBar(barCentimetro);
+
+        BarChartModel barPolegada = new BarChartModel();
+        barPolegada.setBarValue(0);
+        barPolegada.setBarColor(Color.parseColor("#28A745"));
+        barPolegada.setBarTag("Polegadas"); //You can set your own tag to bar model
+        barPolegada.setBarText("Polegadas");
+        barChart.addBar(barPolegada);
 
         // Centimentro
         centimetro.setOnFocusChangeListener(new View.OnFocusChangeListener() {
@@ -66,7 +62,25 @@ public class MainActivity extends Activity {
 
                     polegada.setText(String.valueOf(stripDecimal(outputPol)));
 
-                    setPol(outputPol);
+                    int convertCM = Math.round(temp);
+
+                    BarChartModel barCentimetro = new BarChartModel();
+                    barCentimetro.setBarValue(convertCM);
+                    barCentimetro.setBarColor(Color.parseColor("#28A745"));
+                    barCentimetro.setBarTag("Centimetros"); //You can set your own tag to bar model
+                    barCentimetro.setBarText("Centimetros");
+                    barChart.updateBar(convertCM, barCentimetro);
+                    barChart.getBar();
+
+                    int convertPol = Math.round(outputPol);
+
+                    BarChartModel barPolegada = new BarChartModel();
+                    barPolegada.setBarValue(convertPol);
+                    barPolegada.setBarColor(Color.parseColor("#28A745"));
+                    barPolegada.setBarTag("Polegadas"); //You can set your own tag to bar model
+                    barPolegada.setBarText("Polegadas");
+                    barChart.updateBar(convertPol, barPolegada);
+                    barChart.getBar();
 
                 } else if (selectedEditTxt == Medidas.CENTIMENTROS){
                     polegada.setText("");
@@ -96,11 +110,9 @@ public class MainActivity extends Activity {
                 if (!tmpValue.equals("") && !tmpValue.equals(".") && selectedEditTxt == Medidas.POLEGADAS) {
                     float temp = Float.parseFloat(tmpValue);
                     //centimetros
-                    float outputCent = (float) (temp / 0.39370);
+                    final float outputCent = (float) (temp / 0.39370);
 
                     centimetro.setText(String.valueOf(stripDecimal(outputCent)));
-
-                    setCent(outputCent);
 
                 } else if (selectedEditTxt == Medidas.POLEGADAS) {
                     centimetro.setText("");
@@ -113,8 +125,6 @@ public class MainActivity extends Activity {
             public void onTextChanged(CharSequence s, int start, int before, int count) { }
         });
 
-        charts();
-
     }
 
     public float stripDecimal(float temp) {
@@ -123,25 +133,5 @@ public class MainActivity extends Activity {
         return Float.parseFloat(valor);
     }
 
-    public void charts() {
-
-        BarChart barChart = (BarChart) findViewById(R.id.barChart);
-
-        //Add single bar
-        BarChartModel barChartModel = new BarChartModel();
-        barChartModel.setBarValue(50);
-        barChartModel.setBarColor(Color.parseColor("#9C27B0"));
-        barChartModel.setBarTag(null); //You can set your own tag to bar model
-        barChartModel.setBarText("50");
-
-        barChart.addBar(barChartModel);
-
-        //Add mutliple bar at once as list;
-        List<BarChartModel> barChartModelList = new ArrayList<>();
-
-        //populate bar array list and add to barchart as a list.
-        barChart.addBar(barChartModelList);
-
-    }
-
 }
+

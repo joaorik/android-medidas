@@ -60,8 +60,18 @@
 
     <me.ithebk.barchart.BarChart
         android:id="@+id/barChart"
-        android:layout_width="match_parent"
-        android:layout_height="387dp">
+        android:layout_width="350dp"
+        android:layout_height="387dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="11dp"
+        app:bar_show_animation="true"
+        app:bar_show_value="true"
+        app:bar_spaces="20dp"
+        app:bar_text_size="20sp"
+        app:bar_type="horizontal"
+        app:bar_width="40dp">
+
     </me.ithebk.barchart.BarChart>
 
 </RelativeLayout>
