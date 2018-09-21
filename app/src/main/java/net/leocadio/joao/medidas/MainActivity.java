@@ -8,13 +8,12 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.EditText;
 
-import com.github.mikephil.charting.charts.BarChart;
-import com.github.mikephil.charting.data.BarData;
-import com.github.mikephil.charting.data.BarDataSet;
-import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.utils.ColorTemplate;
-
 import java.util.ArrayList;
+import java.util.List;
+
+import me.ithebk.barchart.BarChart;
+import me.ithebk.barchart.BarChartModel;
+
 
 public class MainActivity extends Activity {
 
@@ -128,30 +127,21 @@ public class MainActivity extends Activity {
 
         BarChart barChart = (BarChart) findViewById(R.id.barChart);
 
-        barChart.setDrawBarShadow(false);
-        barChart.setDrawValueAboveBar(true);
-        barChart.setMaxVisibleValueCount(50);
-        barChart.setPinchZoom(true);
-        barChart.setDrawGridBackground(false);
+        //Add single bar
+        BarChartModel barChartModel = new BarChartModel();
+        barChartModel.setBarValue(50);
+        barChartModel.setBarColor(Color.parseColor("#9C27B0"));
+        barChartModel.setBarTag(null); //You can set your own tag to bar model
+        barChartModel.setBarText("50");
 
-        ArrayList<BarEntry> barEntries = new ArrayList<>();
+        barChart.addBar(barChartModel);
 
-        barEntries.add(new BarEntry(0f, 70, "Centimetros"));
-        barEntries.add(new BarEntry(1f, 50, "Polegadas"));
+        //Add mutliple bar at once as list;
+        List<BarChartModel> barChartModelList = new ArrayList<>();
 
-        BarDataSet barDataSet = new BarDataSet(barEntries, "Medidas:");
-        barDataSet.setColors(ColorTemplate.COLORFUL_COLORS);
-        barDataSet.setValueTextColor(Color.BLUE);
-        barDataSet.notifyDataSetChanged();
-        barDataSet.setValueTextSize(15);
+        //populate bar array list and add to barchart as a list.
+        barChart.addBar(barChartModelList);
 
-
-        BarData data = new BarData(barDataSet);
-        data.setBarWidth(0.5f);
-        data.notifyDataChanged();
-
-        barChart.setData(data);
-        barChart.invalidate();
     }
 
 }
